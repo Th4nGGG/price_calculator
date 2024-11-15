@@ -1,27 +1,45 @@
 
+import math
+
 def round_up(output):
     decimal = int((output*100) % 10)
-    print(decimal)
     if decimal != 0:
         output += 0.05
         output = round(output, 1)
         return(output)
-       
-    
-def calculate_price(a,b,c):
-    if a/b < 3:
-        output = a/b * 1.5
+
+def calculate_output(a, b=None, c=None):
+    if b is not None:
+        a /= b
+    if a < 3:
+        output = a * 1.5
     else:
-        output = a/b * 1.4
-    if c == "+":
+        output = a * 1.4
+    if c == '+':
         output *= 1.1
-    else:
-        print("Incorrect input for GST, please try again")
     return round_up(output)
 
 while True:
-    a,b,c = input("Enter Unit price, Quantity and GST (+ for YES, leave blank for NO), separated by spaces: ").split()
-    a = float(a)      
-    b = float(b)       
-    c = str(c) 
-    print("Price: ", calculate_price(a,b,c))
+    inputs = input("Enter price, quantity, and GST as + separated by spaces (or 'quit' to exit). Only price is necessary: ").split()
+
+    if inputs[0].lower() == 'quit':
+        print("Exiting...")
+        break
+
+    if len(inputs) < 1 or len(inputs) > 3:
+        print("Invalid number of inputs. Please enter a, b, and c separated by spaces.")
+    else:
+        try:
+            a = float(inputs[0])
+            b = float(inputs[1]) if len(inputs) > 1 else None
+            c = inputs[2] if len(inputs) > 2 else None
+
+            if c not in ['+', None]:
+                print("Invalid input for 'c'. It should be '+' or left blank.")
+            else:
+                result = calculate_output(a, b, c)
+                print("Price:", result)
+        except ValueError:
+            print("Invalid input. Please enter numeric values for 'a' and 'b'.")
+
+print("Exited.")
