@@ -1,33 +1,30 @@
-
 import math
 
 def round_up(output):
-    decimal = int((output*100) % 10)
-    if decimal != 0:
-        output += 0.05
-        output = round(output, 1)
-        return(output)
+    output = math.ceil(output * 10) / 10.0
+    return output
 
-def calculate_output(a, b=None, c=None):
-    if b is not None:
-        a /= b
-    if a < 3:
-        output = a * 1.5
+def calculate_output(a, b, c):
+    if b is None:  # If b is not provided, use default value of 1 (or other logic you prefer)
+        b = 1
+    output = a/b
+    if output < 3:
+        output *= 1.5
     else:
-        output = a * 1.4
+        output *= 1.4
     if c == '+':
         output *= 1.1
     return round_up(output)
 
 while True:
-    inputs = input("Enter price, quantity, and GST as + separated by spaces (or 'quit' to exit). Only price is necessary: ").split()
+    inputs = input("Enter price, quantity and GST as + separated by spaces (or 'quit' to exit). Only price is necessary: ").split()
 
     if inputs[0].lower() == 'quit':
         print("Exiting...")
         break
 
     if len(inputs) < 1 or len(inputs) > 3:
-        print("Invalid number of inputs. Please enter a, b, and c separated by spaces.")
+        print("Invalid number of inputs. Please enter price, quantity and GST separated by spaces.")
     else:
         try:
             a = float(inputs[0])
@@ -37,8 +34,8 @@ while True:
             if c not in ['+', None]:
                 print("Invalid input for 'c'. It should be '+' or left blank.")
             else:
-                result = calculate_output(a, b, c)
-                print("Price:", result)
+                output = calculate_output(a, b, c)
+                print("Price:", output)
         except ValueError:
             print("Invalid input. Please enter numeric values for 'a' and 'b'.")
 
